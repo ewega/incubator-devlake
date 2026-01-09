@@ -1,0 +1,2 @@
+connection_id,file_name,s3_path,scope_id,processed
+1,test_user_data.csv,test/2025/06/test_user_data.csv,test/2025/06,0

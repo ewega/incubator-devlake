@@ -1,0 +1,4 @@
+connection_id,user_id,date,display_name,scope_id,code_review_findings_count,inline_acceptance_count,inline_suggestions_count,chat_ai_code_lines,chat_messages_interacted,chat_messages_sent,code_fix_acceptance_event_count,code_fix_accepted_lines,code_fix_generated_lines,code_fix_generation_event_count,inline_chat_acceptance_event_count,inline_chat_accepted_line_additions,inline_chat_total_event_count
+1,user-001,2025-06-23T00:00:00Z,user-001,test/2025/06,5,10,20,100,15,20,3,50,75,5,8,120,25
+1,user-002,2025-06-23T00:00:00Z,user-002,test/2025/06,3,8,15,80,10,12,2,30,45,3,5,90,18
+1,user-001,2025-06-24T00:00:00Z,user-001,test/2025/06,7,12,25,120,18,22,4,60,85,6,10,150,30

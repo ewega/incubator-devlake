@@ -1,0 +1,4 @@
+UserId,Date,CodeReview_FindingsCount,Inline_AcceptanceCount,Inline_SuggestionsCount,Chat_AICodeLines,Chat_MessagesInteracted,Chat_MessagesSent,CodeFix_AcceptanceEventCount,CodeFix_AcceptedLines,CodeFix_GeneratedLines,CodeFix_GenerationEventCount,InlineChat_AcceptanceEventCount,InlineChat_AcceptedLineAdditions,InlineChat_TotalEventCount
+user-001,2025-06-23,5,10,20,100,15,20,3,50,75,5,8,120,25
+user-002,2025-06-23,3,8,15,80,10,12,2,30,45,3,5,90,18
+user-001,2025-06-24,7,12,25,120,18,22,4,60,85,6,10,150,30
