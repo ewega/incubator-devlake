@@ -22,7 +22,7 @@ import (
 )
 
 // SubTaskMetaList holds all subtask metadata for the github_copilot plugin
-var SubTaskMetaList = []plugin.SubTaskMeta{
-	CollectUsageMeta,
-	ExtractUsageMeta,
+var SubTaskMetaList = []*plugin.SubTaskMeta{
+	&CollectUsageMeta,
+	&ExtractUsageMeta,
 }

@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"github.com/apache/incubator-devlake/core/errors"
+	"github.com/apache/incubator-devlake/core/plugin"
 	helper "github.com/apache/incubator-devlake/helpers/pluginhelper/api"
 	"github.com/apache/incubator-devlake/plugins/github_copilot/models"
 )
@@ -54,7 +55,7 @@ func DecodeAndValidateTaskOptions(options map[string]interface{}) (*GithubCopilo
 }
 
 // NewGithubCopilotApiClient creates a new API client for GitHub Copilot
-func NewGithubCopilotApiClient(taskCtx helper.TaskContext, connection *models.GithubCopilotConnection) (*helper.ApiAsyncClient, errors.Error) {
+func NewGithubCopilotApiClient(taskCtx plugin.TaskContext, connection *models.GithubCopilotConnection) (*helper.ApiAsyncClient, errors.Error) {
 	// GitHub API base URL
 	apiUrl := connection.Endpoint
 	if apiUrl == "" {

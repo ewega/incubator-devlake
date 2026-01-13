@@ -21,7 +21,6 @@ import (
 	"github.com/apache/incubator-devlake/core/errors"
 	coreModels "github.com/apache/incubator-devlake/core/models"
 	"github.com/apache/incubator-devlake/core/plugin"
-	helper "github.com/apache/incubator-devlake/helpers/pluginhelper/api"
 )
 
 // MakePipelinePlanV200 creates a pipeline plan for the github_copilot plugin
@@ -30,17 +29,34 @@ func MakePipelinePlanV200(
 	connectionId uint64,
 	scopes []*coreModels.BlueprintScope,
 ) (coreModels.PipelinePlan, []plugin.Scope, errors.Error) {
-	plans := make([]coreModels.PipelineStage, 0)
-	plan, err := helper.MakePipelinePlanV200(
-		subtaskMetas,
-		connectionId,
-		scopes,
-		nil, // no scope details transformer needed for now
-	)
-	if err != nil {
-		return nil, nil, err
+	// For now, return a simple plan with just the subtasks
+	// This can be expanded later to support more complex pipeline generation
+	var plan coreModels.PipelinePlan
+	var pluginScopes []plugin.Scope
+	
+	// Create a single stage with all subtasks
+	if len(scopes) > 0 {
+		stage := make(coreModels.PipelineStage, 0)
+		for _, scope := range scopes {
+			// Create task options from scope
+			options := make(map[string]interface{})
+			options["connectionId"] = connectionId
+			options["organizationName"] = scope.ScopeId
+			
+			// Convert subtask metas to subtask names
+			subtaskNames := make([]string, len(subtaskMetas))
+			for i, meta := range subtaskMetas {
+				subtaskNames[i] = meta.Name
+			}
+			
+			stage = append(stage, &coreModels.PipelineTask{
+				Plugin:   "github_copilot",
+				Subtasks: subtaskNames,
+				Options:  options,
+			})
+		}
+		plan = append(plan, stage)
 	}
-	plans = append(plans, plan...)
 
-	return plans, nil, nil
+	return plan, pluginScopes, nil
 }

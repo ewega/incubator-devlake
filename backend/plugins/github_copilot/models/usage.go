@@ -47,8 +47,6 @@ type GithubCopilotUsage struct {
 	LanguageBreakdown string `gorm:"type:text" json:"language_breakdown,omitempty"`
 	// Editor breakdown (stored as JSON)
 	EditorBreakdown   string `gorm:"type:text" json:"editor_breakdown,omitempty"`
-	
-	common.NoPKModel `json:"-" mapstructure:"-" swaggerignore:"true"`
 }
 
 func (GithubCopilotUsage) TableName() string {

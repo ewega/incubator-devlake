@@ -45,23 +45,15 @@ func CollectUsage(taskCtx plugin.SubTaskContext) errors.Error {
 	logger := taskCtx.GetLogger()
 	logger.Info("Collecting GitHub Copilot usage data for organization: %s", data.Options.OrganizationName)
 
-	// Build API URL
-	var apiPath string
+	// Build API URL template
+	var urlTemplate string
 	if data.Options.EnterpriseName != "" {
-		apiPath = fmt.Sprintf("/enterprises/%s/copilot/usage", data.Options.EnterpriseName)
+		urlTemplate = fmt.Sprintf("/enterprises/%s/copilot/usage", data.Options.EnterpriseName)
 	} else {
-		apiPath = fmt.Sprintf("/orgs/%s/copilot/usage", data.Options.OrganizationName)
+		urlTemplate = fmt.Sprintf("/orgs/%s/copilot/usage", data.Options.OrganizationName)
 	}
 
-	// Add query parameters
-	query := url.Values{}
-	if data.Options.Since != nil {
-		query.Set("since", data.Options.Since.Format("2006-01-02"))
-	}
-	// Optional: add page size parameter if supported
-	query.Set("per_page", "100")
-
-	collector, err := helper.NewStatefulApiCollectorForFinalizableEntity(helper.FinalizableApiCollectorArgs{
+	collector, err := helper.NewApiCollector(helper.ApiCollectorArgs{
 		RawDataSubTaskArgs: helper.RawDataSubTaskArgs{
 			Ctx: taskCtx,
 			Params: GithubCopilotApiParams{
@@ -70,15 +62,27 @@ func CollectUsage(taskCtx plugin.SubTaskContext) errors.Error {
 			},
 			Table: RAW_USAGE_TABLE,
 		},
-		ApiClient: data.ApiClient,
-		CollectNewRecordsByList: &helper.FinalizableApiCollectorListArgs{
-			PageSize:    100,
-			GetNextPageCustomData: nil,
-			FinalizableApiCollectorCommonArgs: helper.FinalizableApiCollectorCommonArgs{
-				UrlTemplate:    apiPath,
-				Query:          query,
-				ResponseParser: ParseUsageResponse,
-			},
+		ApiClient:   data.ApiClient,
+		UrlTemplate: urlTemplate,
+		PageSize:    100,
+		Query: func(reqData *helper.RequestData) (url.Values, errors.Error) {
+			query := url.Values{}
+			if data.Options.Since != nil {
+				query.Set("since", data.Options.Since.Format("2006-01-02"))
+			}
+			query.Set("per_page", "100")
+			if reqData.Pager != nil {
+				query.Set("page", fmt.Sprintf("%v", reqData.Pager.Page))
+			}
+			return query, nil
+		},
+		ResponseParser: func(res *http.Response) ([]json.RawMessage, errors.Error) {
+			var items []json.RawMessage
+			err := helper.UnmarshalResponse(res, &items)
+			if err != nil {
+				return nil, err
+			}
+			return items, nil
 		},
 	})
 
@@ -93,14 +97,4 @@ func CollectUsage(taskCtx plugin.SubTaskContext) errors.Error {
 type GithubCopilotApiParams struct {
 	ConnectionId     uint64
 	OrganizationName string
-}
-
-// ParseUsageResponse parses the API response
-func ParseUsageResponse(res *http.Response) ([]json.RawMessage, errors.Error) {
-	var items []json.RawMessage
-	err := helper.UnmarshalResponse(res, &items)
-	if err != nil {
-		return nil, err
-	}
-	return items, nil
 }

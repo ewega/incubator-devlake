@@ -20,12 +20,27 @@ package main
 import (
 	"github.com/apache/incubator-devlake/core/runner"
 	"github.com/apache/incubator-devlake/plugins/github_copilot/impl"
+	"github.com/spf13/cobra"
 )
 
 // PluginEntry exports a symbol for the plugin
-var PluginEntry impl.GithubCopilot
+var PluginEntry impl.GithubCopilot //nolint
 
 // standalone mode for debugging
 func main() {
-	runner.DirectRun(&PluginEntry)
+	cmd := &cobra.Command{Use: "github_copilot"}
+	organizationName := cmd.Flags().StringP("organization-name", "o", "", "github organization name")
+	connectionId := cmd.Flags().Uint64P("connection-id", "c", 0, "github copilot connection id")
+	timeAfter := cmd.Flags().StringP("time-after", "a", "", "collect data that are created after specified time, ie 2006-01-02")
+	_ = cmd.MarkFlagRequired("organization-name")
+	_ = cmd.MarkFlagRequired("connection-id")
+
+	cmd.Run = func(cmd *cobra.Command, args []string) {
+		runner.DirectRun(cmd, args, PluginEntry, map[string]interface{}{
+			"organizationName": *organizationName,
+			"connectionId":     *connectionId,
+		}, *timeAfter)
+	}
+
+	runner.RunCmd(cmd)
 }

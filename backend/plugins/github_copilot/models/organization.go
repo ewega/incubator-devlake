@@ -19,7 +19,6 @@ package models
 
 import (
 	"github.com/apache/incubator-devlake/core/models/common"
-	"github.com/apache/incubator-devlake/core/plugin"
 )
 
 // GithubCopilotOrganization represents a GitHub organization for Copilot metrics collection
@@ -51,9 +50,14 @@ func (o GithubCopilotOrganization) ScopeFullName() string {
 }
 
 func (o GithubCopilotOrganization) ScopeParams() interface{} {
-	return &plugin.ApiResourceParams{
-		ConnectionId: o.ConnectionId,
-		Table:        o.TableName(),
-		Id:           o.OrganizationName,
+	return &GithubCopilotApiParams{
+		ConnectionId:     o.ConnectionId,
+		OrganizationName: o.OrganizationName,
 	}
+}
+
+// GithubCopilotApiParams holds the API params for the scope
+type GithubCopilotApiParams struct {
+	ConnectionId     uint64
+	OrganizationName string
 }
