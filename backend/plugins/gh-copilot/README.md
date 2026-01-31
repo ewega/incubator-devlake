@@ -6,16 +6,32 @@ It follows the same structure/patterns as other DevLake data-source plugins (not
 
 ## What it collects
 
-**GitHub Copilot Metrics API (GA)** - Using API version 2022-11-28:
+### ⚠️ Current API Status
 
+**DEPRECATED Endpoints (Currently Used - Sunset April 2, 2026)**:
+- `GET /orgs/{org}/copilot/metrics` - Legacy org-level usage metrics (up to 100 days)
+
+**Migration Required**: The plugin currently uses the legacy Copilot Metrics API which will be **sunset on April 2, 2026**. Migration to the new Usage Metrics Reports API is planned.
+
+### Recommended New Endpoints (Migration Target)
+
+**Organization-level Usage Metrics Reports** (Two-step flow: metadata → download JSON):
+- `GET /orgs/{org}/copilot/metrics/reports/organization-1-day?day=YYYY-MM-DD` - Single day report
+- `GET /orgs/{org}/copilot/metrics/reports/organization-28-day/latest` - Latest 28-day report
+
+**Enterprise-level Usage Metrics Reports**:
+- `GET /enterprises/{enterprise}/copilot/metrics/reports/enterprise-1-day?day=YYYY-MM-DD` - Single day report
+- `GET /enterprises/{enterprise}/copilot/metrics/reports/enterprise-28-day/latest` - Latest 28-day report
+
+**Seat Management** (Still valid):
 - `GET /orgs/{org}/copilot/billing` - Organization billing information
 - `GET /orgs/{org}/copilot/billing/seats` - Seat assignments and license usage
-- `GET /orgs/{org}/copilot/metrics` - Organization-level usage metrics (up to 100 days)
 
-**API Documentation**: https://docs.github.com/en/rest/copilot/copilot-metrics
+**API Documentation**: 
+- New API: https://docs.github.com/en/rest/copilot/copilot-usage-metrics
+- Legacy API: https://docs.github.com/en/rest/copilot/copilot-metrics (deprecated)
 
-**Note**: These are the current GA (Generally Available) endpoints. GitHub also provides enterprise-level endpoints for larger organizations:
-- `GET /enterprises/{enterprise}/copilot/metrics/reports/enterprise-1-day` - Enterprise reports with downloadable NDJSON files
+**Research Documentation**: See `/copilot-metrics-research/` for detailed API research and migration strategy.
 
 **Stored data (tool layer)**:
 

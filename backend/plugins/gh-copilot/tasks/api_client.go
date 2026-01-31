@@ -59,12 +59,24 @@ func handleGitHubRetryAfter(res *http.Response, logger log.Logger, now nowFunc, 
 
 // CreateApiClient creates an API client for GitHub Copilot REST API endpoints.
 //
-// This client is configured to use the GitHub Copilot Metrics API (GA):
-// - GET /orgs/{org}/copilot/metrics (organization-level usage metrics)
-// - GET /orgs/{org}/copilot/billing/seats (seat assignments)
+// ⚠️ DEPRECATION WARNING: This client currently uses the legacy Copilot Metrics API
+// which will be sunset on April 2, 2026. Migration to the new Usage Metrics Reports
+// API is required.
+//
+// Current endpoints (DEPRECATED):
+// - GET /orgs/{org}/copilot/metrics (organization-level usage metrics - DEPRECATED)
+// - GET /orgs/{org}/copilot/billing/seats (seat assignments - still valid)
+//
+// New recommended endpoints (migration target):
+// - GET /orgs/{org}/copilot/metrics/reports/organization-1-day?day=YYYY-MM-DD
+// - GET /orgs/{org}/copilot/metrics/reports/organization-28-day/latest
+// - GET /enterprises/{enterprise}/copilot/metrics/reports/enterprise-1-day?day=YYYY-MM-DD
+//
+// The new endpoints use a two-step flow: request report metadata → download JSON files.
+// See /copilot-metrics-research/ for detailed migration strategy.
 //
 // API Version: 2022-11-28 (GitHub REST API versioning)
-// Documentation: https://docs.github.com/en/rest/copilot/copilot-metrics
+// Documentation: https://docs.github.com/en/rest/copilot/copilot-usage-metrics
 func CreateApiClient(taskCtx plugin.TaskContext, connection *models.GhCopilotConnection) (*helper.ApiAsyncClient, errors.Error) {
 	apiClient, err := helper.NewApiClientFromConnection(taskCtx.GetContext(), taskCtx, connection)
 	if err != nil {
