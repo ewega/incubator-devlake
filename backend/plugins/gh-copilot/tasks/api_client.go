@@ -73,7 +73,7 @@ func handleGitHubRetryAfter(res *http.Response, logger log.Logger, now nowFunc, 
 // - GET /enterprises/{enterprise}/copilot/metrics/reports/enterprise-1-day?day=YYYY-MM-DD
 //
 // The new endpoints use a two-step flow: request report metadata → download JSON files.
-// See /copilot-metrics-research/ for detailed migration strategy.
+// See the copilot-metrics-research directory in this repository for detailed migration strategy.
 //
 // API Version: 2022-11-28 (GitHub REST API versioning)
 // Documentation: https://docs.github.com/en/rest/copilot/copilot-usage-metrics

@@ -31,7 +31,7 @@ It follows the same structure/patterns as other DevLake data-source plugins (not
 - New API: https://docs.github.com/en/rest/copilot/copilot-usage-metrics
 - Legacy API: https://docs.github.com/en/rest/copilot/copilot-metrics (deprecated)
 
-**Research Documentation**: See `/copilot-metrics-research/` for detailed API research and migration strategy.
+**Research Documentation**: See the `copilot-metrics-research/` directory in this repository for detailed API research and migration strategy.
 
 **Stored data (tool layer)**:
 

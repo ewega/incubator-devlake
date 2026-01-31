@@ -89,7 +89,8 @@ func computeMetricsDateRange(now time.Time, since *time.Time) (start time.Time, 
 // 2. Download JSON files from signed URLs
 // 3. Parse downloaded JSON/JSONL data
 //
-// See /copilot-metrics-research/copilot_implementation_strategy.md for migration details.
+// See the copilot-metrics-research/copilot_implementation_strategy.md file in this
+// repository for migration details.
 //
 // The collector supports incremental collection based on the last sync time.
 func CollectCopilotOrgMetrics(taskCtx plugin.SubTaskContext) errors.Error {
