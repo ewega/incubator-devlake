@@ -58,7 +58,7 @@ func handleGitHubRetryAfter(res *http.Response, logger log.Logger, now nowFunc, 
 }
 
 // CreateApiClient creates an API client for GitHub Copilot REST API endpoints.
-// 
+//
 // This client is configured to use the GitHub Copilot Metrics API (GA):
 // - GET /orgs/{org}/copilot/metrics (organization-level usage metrics)
 // - GET /orgs/{org}/copilot/billing/seats (seat assignments)
